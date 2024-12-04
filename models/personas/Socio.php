@@ -1,6 +1,6 @@
 <?php
 
-    class Socio{
+   final class Socio{
         
     }
 
