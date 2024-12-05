@@ -1,4 +1,0 @@
-Explicación:
-Autenticación: El usuario inicia sesión o se redirige a la pantalla de login.
-Gestión de Tareas: Tras iniciar sesión, el usuario ve sus tareas y puede añadir nuevas.
-Almacenamiento en Archivo: Las credenciales de los usuarios se almacenan en users.json
