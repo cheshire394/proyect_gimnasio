@@ -14,7 +14,6 @@ try {
 
     //OBJETOS DE LA CLASE PERSONAS-> TRABAJADORES
 
-  
 
     //MONITORES: 
     
@@ -162,6 +161,12 @@ Trabajador::mostrarTrabajadores();
     echo $e->datosIncorrectos(); 
 }catch (Exception $e) {
     echo "Error: " . $e->getMessage();
+}
+
+
+
+//CODIGO DE RAUL...REUBICAR, NO TE LO QUIERO TOCAR POR NO JODERTE LAS RUTAS QUE TE LLEVAN AQUI
+
 require_once __DIR__ . '/controllers/AuthController.php';
 
 $action = $_GET['action'] ?? 'login'; // Acción por defecto: login
