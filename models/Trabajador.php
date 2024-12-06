@@ -3,10 +3,9 @@ require_once('datosIncorrectos.php');
 
 class Trabajador extends Persona {
 
-    
+    const  HORAS_EXTRA=15; 
     private $funcion; 
     private $sueldo; 
-    private $tipo_contrato; 
     private $jornada; 
     private $horas_extra; 
     private $cuenta_bancaria;
@@ -17,35 +16,35 @@ class Trabajador extends Persona {
     ]; 
 
     
-          
+      
     function __construct(
         $dni, $nombre, $apellidos, $fecha_nac, $telefono, $email, 
-        $funcion = 'recepcionista', $sueldo = 1100, $tipo_contrato = 'indefinido', 
-        $jornada = 40, $horas_extra = 0, $cuenta_bancaria = null) {
-
+        $cuenta_bancaria, $funcion = 'recepcionista', $sueldo = 1100,$horas_extra = 0, $jornada =40) {
+    
+    
+    $this->cuenta_bancaria = $this->validarCuentaBancaria($cuenta_bancaria); 
     $this->funcion = $funcion;
     $this->sueldo = $sueldo;
-    $this->tipo_contrato = $tipo_contrato;
-    $this->jornada = $jornada;
     $this->horas_extra = $horas_extra;
+    $this->jornada = $jornada;
+    
 
-    if (!$cuenta_bancaria) {
-        $this->cuenta_bancaria = null;
-    } else {
-        $this->cuenta_bancaria = $this->validarCuentaBancaria($cuenta_bancaria); 
-    }
-
+    //propiedades heredadas:
     parent::__construct($dni, $nombre, $apellidos, $fecha_nac, $telefono, $email);
     
-    if($funcion == 'recepcionista')self::$trabajadores['recepcionistas'][]=$this; 
-    else self::$trabajadores['monitores'][]=$this; 
+    //los objetos son copiados en el array por referencia implicitamente, esto hace que el array que almacena los objetos
+    // actualice sus datos cuando ejecutamos un setter sobre cualquier objeto. 
+    if($funcion == 'recepcionista')self::$trabajadores['recepcionistas'][$this->dni]=$this; 
+    else self::$trabajadores['monitores'][$this->dni]=$this; 
 }
 
         
 
     public function __set($name, $value) {
         if (property_exists($this, $name)) {
+
             $this->$name = $value; 
+            if($name == 'horas_extra') $this->cobrarHorasExtra();
         } else {
             throw new Exception('ERROR EN EL SETTER TRABAJADOR: LA PROPIEDAD QUE DESEAS MODIFICAR NO EXISTE'); 
         }
@@ -58,6 +57,15 @@ class Trabajador extends Persona {
             throw new Exception('ERROR EN EL GETTER TRABAJADOR: LA PROPIEDAD QUE DESEAS OBTENER NO EXISTE');
         }
     }
+
+
+    //será necesario trabajar con ellos en la clase --> "Clases", para asignarles clases. 
+    public static function getTrabajadoresMonitores()
+    {
+        return SELF::$trabajadores['monitores'];
+    }
+
+
 
     public function validarCuentaBancaria($cuenta) {
         
@@ -81,7 +89,7 @@ class Trabajador extends Persona {
     
             foreach ($Arr_obj as $objeto) {
                 
-                $propiedades = get_object_vars($objeto);
+                $propiedades = get_object_vars($objeto); //obtenemos las propiedades del objeto
     
                 foreach ($propiedades as $propiedad => $valor) {
                     echo "<b>$propiedad</b>: $valor<br>";
@@ -93,8 +101,16 @@ class Trabajador extends Persona {
     }
 
 
+    //Este metodo solo será llamado desde setter cuando se modifique las horas extra
+    private function cobrarHorasExtra(){
+        
+        $aumento = $this->__get('horas_extra') * self::HORAS_EXTRA + $this->__get('sueldo'); 
+        $this->__set('sueldo', $aumento);   
+    }
+
+
     
-    
+
 }
 
 
