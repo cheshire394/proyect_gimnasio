@@ -47,8 +47,9 @@ require_once('Monitor.php');
         //A LA CLASE MONITORES Y ADEMÁS SI EL GIMNASIO SOLO TIENE UNA SALA, NO TIENE SENTIDO QUE POR EJEMPLO PUEDA MODIFICAR LA HORA
         //DE LA CLASE CON UN SETTER Y DUPLICAR UNA CLASE A LA MISMA HORA (PORQUE FISICAMENTE ESE ESPACIO NO EXISTE EN EL GIMNASIO)
         //POR ESE MOTIVO UNA VEZ EL OBJETO CLASE ES CREADO, LA UNICA PROPIEDAD MODIFICABLE ES EL MONITOR, Y SIEMPRE Y CUANDO CUMPLA LOS
-        //REQUISITOS DEL METODO ASGINAR MONITOR:
-        public function sustituirMonitor($dni_new_monitor)
+        //REQUISITOS DEL METODO ASGINAR MONITOR:        
+             
+        public function sustituirMonitor(string $dni_new_monitor)
         {           
                     $this->asignarMonitor($dni_new_monitor); 
                     $this->dni_monitor = $dni_new_monitor;
@@ -121,84 +122,83 @@ require_once('Monitor.php');
                     }
                     echo "<br>"; 
 
+                
+
                 }
         }
 
          
-         public static function mostrar_Clases_filtradas($propiedad_filtrada, $valor_filtrado){
-            //$dni_monitor, $nombre_actividad, $dia_semana,$hora_inicio
-
-            echo "<p><b>CLASES DISPONIBLES CON EL FILTRO ".strtoupper($valor_filtrado).":</b></p>"; 
-            switch($propiedad_filtrada){
-
-                case 'dni_monitor':
-
-                     // Filtrar clases según el monitor que las imparte
-                     $clases_filtradas = array_filter(self::$horario_gym, function($clase) use ($valor_filtrado) {
-                        return $clase->dni_monitor === $valor_filtrado;
+        private static function Clases_filtradas($propiedad_filtrada, $valor_filtrado){
+           
+                     $clases_filtradas = array_filter(self::$horario_gym, function($clase) use ($propiedad_filtrada, $valor_filtrado) {
+                        return $clase->$propiedad_filtrada === $valor_filtrado;
                     });
 
-
-                    break; 
-
-                case 'nombre_actividad':
-
-                    // Filtrar clases según la actividad
-                    $clases_filtradas = array_filter(self::$horario_gym, function($clase) use ($valor_filtrado) {
-                        return $clase->nombre_actividad === $valor_filtrado;
-                    });
-                    break;
-
-                case 'dia_semana':
-
-                    // Filtrar clases según el dia de la semana
-                    $clases_filtradas = array_filter(self::$horario_gym, function($clase) use ($valor_filtrado) {
-                        return $clase->dia_semana === $valor_filtrado;
-                    });
-                    break;
-
-                case 'hora_inicio': 
-
-                     // Filtrar clases según la hora de inicio
-                     $clases_filtradas = array_filter(self::$horario_gym, function($clase) use ($valor_filtrado) {
-                        return $clase->hora_inicio === $valor_filtrado;
-                    });
-                    break;
-                
-                
-
-                default: 
-                    throw new datosIncorrectos('ERROR EN EL METODO MOSTRAR_CLASES_FILTRADAS: LAS PROPIEDAD DE LA CLASE QUE DESEAS FILTRAR NO EXISTE');
-            }
-
-            //MOSTRAMOS LOS RESULTADOS DE LAS FILTRACIONES
-            if(empty($clases_filtradas)) echo "<p> no existe ninguna clase disponible con el filtro establecido</p><br>"; 
-            else{
-
-                foreach ($clases_filtradas as $obj_Clase) {
-                    $propiedades = get_object_vars($obj_Clase);
-            
-                    foreach ($propiedades as $propiedad => $valor) {
-                        echo "$propiedad => $valor <br>";
-                    }
-                    echo "<br>";
-                }
-            }
-
-
+            return $clases_filtradas; 
         
          }
 
-       
 
-            
+         public static function mostrar_clases_filtradas($propiedad_filtrada, $valor_filtrado){
 
-
-
-}
+              //MOSTRAMOS LOS RESULTADOS DE LAS FILTRACIONES
+              $clases_filtradas=self::Clases_filtradas($propiedad_filtrada, $valor_filtrado);
 
 
+              if(empty($clases_filtradas)) echo "<p> no existe ninguna clase disponible con el filtro establecido</p><br>"; 
+              else{
+                echo "<p><b>CLASES DISPONIBLES CON EL FILTRO ".strtoupper($valor_filtrado).":</b></p>"; 
+                  foreach ($clases_filtradas as $obj_Clase) {
+                      $propiedades = get_object_vars($obj_Clase);
+              
+                      foreach ($propiedades as $propiedad => $valor) {
+                          echo "$propiedad => $valor <br>";
+                      }
+                      echo "<br>";
+                  }
+              }
+         }
 
+
+         public static function eliminarDisciplina($nombre_actividad)
+         {
+
+            $clases_filtradas = self::Clases_filtradas('nombre_actividad', $nombre_actividad);
+            $clases = self::$horario_gym; 
+
+            //obtenems todos los monitores, para restar sus jornadas de la disciplina que impartian (si es necesario): 
+           $monitores = Trabajador:: getTrabajadoresMonitores(); 
+
+            foreach($clases as $id_clase => $obj_clase){
+
+                if(array_key_exists($id_clase, $clases_filtradas)){
+
+                    //reducimos la jornada laboral del monitor que impartia esta disciplina para mantener los datos actualizados:
+                    $dni_monitor_clase_eliminada = $obj_clase->__get('dni_monitor'); 
+                     
+                    if(isset($monitores[$dni_monitor_clase_eliminada])){
+
+                        $monitor =  $monitores[$dni_monitor_clase_eliminada]; //obtenemos el objeto monitor
+                        $jornada_monitor = $monitor->__get('jornada'); //obtenemos su jornada
+                        $jornada_monitor -= self::DURACION_CLASE; //restamos dos horas, de la clase que estamos eliminando
+                        $monitor->__set('jornada', $jornada_monitor); //actualizamos los cambios
+
+                    }
+
+                    unset(self::$horario_gym[$id_clase]); //eliminamos el objeto del array que almacena todas las clases
+                    unset($obj_Clase); //eliminamos el objeto en si.
+                }
+
+         }
+        }
+
+
+
+        public static function getHorario_gym()
+        {
+                return self::$horario_gym;
+        }
+    }
    
 
 

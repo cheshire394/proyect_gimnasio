@@ -139,19 +139,47 @@ $clase19 = new Clase('55462206Y', 'judo', 'sabado',"16:00");
 $clase20 = new Clase('09626574Q', 'taekwondo','sabado',"18:00");
 
 
+//OBJETOS SOCIOS: 
+
+$socio1 = new Socio('66974164G', 'Ana', 'Martínez García', '1992-05-18', '622345678', 'ana.martinez@gym.com', '1');
+$socio2 = new Socio('82709958A', 'Luis', 'Pérez Sánchez', '1988-10-12', '611987654', 'luis.perez@gym.com', '2');
+$socio3 = new Socio('93330782W', 'Sofía', 'López Jiménez', '1995-01-25', '612345987', 'sofia.lopez@gym.com', '3');
+$socio4 = new Socio('55534150Y', 'Javier', 'Rodríguez Fernández', '1990-07-04', '613456123', 'javier.rod@gym.com', '1');
+$socio5 = new Socio('28539505R', 'Laura', 'Hernández Ruiz', '1986-11-30', '614567890', 'laura.hernandez@gym.com', '2');
+$socio6 = new Socio('17304391L', 'Miguel', 'Gómez Martín', '1993-06-15', '615678234', 'miguel.gomez@gym.com', '3');
+$socio7 = new Socio('10129216Q', 'Carmen', 'Sánchez Domínguez', '1987-03-28', '616789567', 'carmen.sanchez@gym.com', '1');
+$socio8 = new Socio('38735211Z', 'Antonio', 'Ruiz Pérez', '1991-12-20', '617890345', 'antonio.ruiz@gym.com', '2');
+$socio9 = new Socio('84084556Y', 'Elena', 'Díaz López', '1996-08-09', '618901234', 'elena.diaz@gym.com', '3');
+$socio10 = new Socio('32520517N', 'Pablo', 'Romero Ortega', '1994-02-14', '619012678', 'pablo.romero@gym.com', '1');
 
 
-//Clase::mostrar_todas_Clases(); funciona bien
-Clase::mostrar_Clases_filtradas('dni_monitor', '50489319H'); 
+//FUNCIONA BIEN
+//$socio1->mostrarDatosSocio(); 
+//Socio::mostrarTodosSocios();
+
+
+
+//NO ELIMINAR EL CODIGO COMENTADO, ESTA COMENTADO SOLO PARA NO MOSTRAR TANTA INFORMACION
+
+//FUNCIONA BIEN AMBOS METODOS
+/*echo "Jornada de ". $monitor_boxeo->__get('nombre') . " => ". $monitor_boxeo->__get('jornada'). "<br>"; 
+Clase::eliminarDisciplina('boxeo'); 
+Clase::mostrar_todas_Clases(); 
+echo "Jornada de ".$monitor_boxeo->__get('nombre') ." después de eliminar la disciplina que imparte: =>  ". $monitor_boxeo->__get('jornada') . "<br>"; */
+
+
+
+//FUNCIONA BIEN
+/*Clase::mostrar_clases_filtradas('dni_monitor', '50489319H'); 
 $clase1->sustituirMonitor('09626574Q'); 
-
 echo "despues de modificar el monitor: "; 
-Clase::mostrar_Clases_filtradas('dni_monitor', '50489319H'); 
+Clase::mostrar_clases_filtradas('dni_monitor', '50489319H'); */
 
 
 //observar, que el salario  de los dos objetos a aumentado conforme a las horas extra automáticamente.
 //tambien la jornada se ha modificado conforme a las clases asignadas
-Trabajador::mostrarTrabajadores(); 
+//FUNCIONA BIEN
+//Trabajador::mostrarTrabajadores(); 
 
 
 

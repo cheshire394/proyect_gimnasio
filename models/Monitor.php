@@ -1,12 +1,17 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
 final class Monitor extends Trabajador {
 
     private $disciplinas = []; 
     private  $clases = []; 
 
     
-    //$cuenta_bancaria, $funcion = 'recepcionista', $sueldo = 1100,$jornada =40, $horas_extra = 0) {
+   
 
     function __construct(
         
@@ -14,7 +19,7 @@ final class Monitor extends Trabajador {
         $cuenta_bancaria,$funcion='monitor',$sueldo = 1100, $horas_extra = 0, $jornada=40,
         $disciplinas = []) {
     
-        // clase se asignarán cuando se cree un objeto clase, no cuando se cree este objeto, y se almacenarán en este array vacio.
+        // clases se rellenará cuando se cree un objeto clase, en el contructor de dicha clase, que llama al método asignarMonitor.
         $this->clases = []; 
 
         $this->funcion='monitor'; 
@@ -24,9 +29,13 @@ final class Monitor extends Trabajador {
     }
 
     public function __set($name, $value) {
+
         if ($name == 'clases' || $name == 'disciplinas') {
+
             $this->$name = $value;
-        } else {
+
+        }else {
+
             parent::__set($name, $value); 
         }
     }

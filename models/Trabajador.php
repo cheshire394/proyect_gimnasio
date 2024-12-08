@@ -59,7 +59,7 @@ class Trabajador extends Persona {
     }
 
 
-    //será necesario trabajar con ellos en la clase --> "Clases", para asignarles clases. 
+    //será necesario trabajar con ellos en la clase --> "Clases.php", para asignarles clases y mas funciones. 
     public static function getTrabajadoresMonitores()
     {
         return SELF::$trabajadores['monitores'];

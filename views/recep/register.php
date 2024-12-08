@@ -25,6 +25,9 @@
         <fieldset>
             <legend style="color: #B0B0B0; font-style: italic; font-size: 14px;">Si quieres domicilar el pago:</legend>
             <input type="text" name="iban" placeholder="IBAN">
+            <p style="color: grey;">*nota: <i>campo no obligatorio, pero si deseas introducirlo te facilitamos un IBAN válido para crear el objeto sin excepciones</i>  ES9345678921244368890123</p>
+
+        <!-- SUGERENCIA DE ALICIA: NO PERDIR DIRECCION NI PAIS-->
             <input type="text" name="direccion" placeholder="Dirección">
             <input type="text" name="pais" placeholder="País">
         </fieldset>
